@@ -275,26 +275,22 @@
     
 
     
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}1}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
-        \PY{k+kn}{import} \PY{n+nn}{os}
-        \PY{k+kn}{import} \PY{n+nn}{sys}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
-        \PY{k+kn}{import} \PY{n+nn}{scipy} \PY{k+kn}{as} \PY{n+nn}{sp}
-        \PY{k+kn}{import} \PY{n+nn}{scipy.optimize}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k+kn}{as} \PY{n+nn}{mpl}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib.colors} \PY{k+kn}{as} \PY{n+nn}{colors}
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
-        \PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k+kn}{import} \PY{n}{gridspec}
-        \PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k+kn}{import} \PY{n}{rc}
-        \PY{k+kn}{import} \PY{n+nn}{pdb}
-        
-        \PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{25.0}
-        \PY{n}{rc}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
-\end{Verbatim}
+    \textbf{Jacob Lustig-Yaeger}\\
+\textbf{ASTR 555 - Planetary Atmospheres}\\
+\textbf{Prof.~David Catling}
+
+\emph{Preamble--} The following homework submission is the output file
+from an iPython Notebook and contains the original code written and run
+for the calculations in this assignment. Including the code does make
+this a lengthy document (perhaps unnecessarily lengthy), but I think
+it's a pretty nifty way to provide my answers and show my work.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}2}]:} \PY{k+kn}{import} \PY{n+nn}{astropy.units} \PY{k+kn}{as} \PY{n+nn}{u}
+{\color{incolor}In [{\color{incolor}56}]:} \PY{c+c1}{\PYZsh{} Import numpy for math}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+         
+         \PY{c+c1}{\PYZsh{} Import units to keep me honest}
+         \PY{k+kn}{import} \PY{n+nn}{astropy.units} \PY{k+kn}{as} \PY{n+nn}{u}
 \end{Verbatim}
 
     \subsection{Problem 1:}\label{problem-1}
@@ -355,29 +351,69 @@ related to Cv via the equation Cp = Cv + R. (Data: Masses in grams/mole:
 Xe = 130, C = 12, H = 1, He = 4, Pb = 206){]}.
 \end{quote}
 
+Let's start by cataloging the given quantities:
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} Known quantities}
-         \PY{n}{T200} \PY{o}{=} \PY{l+m+mf}{273.16} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}
-         \PY{n}{P200} \PY{o}{=} \PY{l+m+mf}{200.0} \PY{o}{*} \PY{l+m+mf}{1e\PYZhy{}3} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}
-         \PY{n}{Tsurf} \PY{o}{=} \PY{l+m+mf}{546.32} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}
-         
-         \PY{c+c1}{\PYZsh{} Define gram/mol unit}
-         \PY{n}{amu} \PY{o}{=} \PY{n}{u}\PY{o}{.}\PY{n}{gram} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}
-         
-         \PY{c+c1}{\PYZsh{} Masses of atoms in grams/mol}
-         \PY{n}{mmw\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{130.} \PY{o}{*} \PY{n}{amu}
-         \PY{n}{mmw\PYZus{}C} \PY{o}{=} \PY{l+m+mf}{12.} \PY{o}{*} \PY{n}{amu}
-         \PY{n}{mmw\PYZus{}H} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{*}\PY{n}{amu}
-         \PY{n}{mmw\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{4.0} \PY{o}{*} \PY{n}{amu}
-         \PY{n}{mmw\PYZus{}Pb} \PY{o}{=} \PY{l+m+mf}{206.} \PY{o}{*} \PY{n}{amu}
-         
-         \PY{c+c1}{\PYZsh{} Mass of methane}
-         \PY{n}{mmw\PYZus{}CH4} \PY{o}{=} \PY{n}{mmw\PYZus{}C} \PY{o}{+} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{mmw\PYZus{}H}
-         
-         \PY{c+c1}{\PYZsh{} Mass of Lead Tetraethyl}
-         \PY{n}{mmw\PYZus{}PbTet} \PY{o}{=} \PY{n}{mmw\PYZus{}Pb} \PY{o}{+} \PY{l+m+mi}{4}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{mmw\PYZus{}C}\PY{o}{+}\PY{l+m+mi}{5}\PY{o}{*}\PY{n}{mmw\PYZus{}H}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Cases}
+{\color{incolor}In [{\color{incolor}61}]:} \PY{n}{T200} \PY{o}{=} \PY{l+m+mf}{273.16} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{k}{print} \PY{n}{T200}
+         \PY{n}{P200} \PY{o}{=} \PY{l+m+mf}{200.0} \PY{o}{*} \PY{l+m+mf}{1e\PYZhy{}3} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{k}{print} \PY{n}{P200}
+         \PY{n}{Tsurf} \PY{o}{=} \PY{l+m+mf}{546.32} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{k}{print} \PY{n}{Tsurf}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+273.16 K
+0.2 bar
+546.32 K
+
+    \end{Verbatim}
+
+    Define gram/mol unit
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}59}]:} \PY{n}{amu} \PY{o}{=} \PY{n}{u}\PY{o}{.}\PY{n}{gram} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{amu}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}59}]:}
+    
+    \(\mathrm{\frac{g}{mol}}\)
+
+    
+
+    The masses of atoms in grams/mol are:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{mmw\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{130.} \PY{o}{*} \PY{n}{amu}
+        \PY{n}{mmw\PYZus{}C} \PY{o}{=} \PY{l+m+mf}{12.} \PY{o}{*} \PY{n}{amu}
+        \PY{n}{mmw\PYZus{}H} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{*}\PY{n}{amu}
+        \PY{n}{mmw\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{4.0} \PY{o}{*} \PY{n}{amu}
+        \PY{n}{mmw\PYZus{}Pb} \PY{o}{=} \PY{l+m+mf}{206.} \PY{o}{*} \PY{n}{amu}
+\end{Verbatim}
+
+    The masses of the molecules are:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}63}]:} \PY{c+c1}{\PYZsh{} Mass of methane}
+         \PY{n}{mmw\PYZus{}CH4} \PY{o}{=} \PY{n}{mmw\PYZus{}C} \PY{o}{+} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{mmw\PYZus{}H}\PY{p}{;} \PY{n}{mmw\PYZus{}CH4}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}63}]:}
+    
+    \(16 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}64}]:} \PY{c+c1}{\PYZsh{} Mass of Lead Tetraethyl}
+         \PY{n}{mmw\PYZus{}PbTet} \PY{o}{=} \PY{n}{mmw\PYZus{}Pb} \PY{o}{+} \PY{l+m+mi}{4}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{mmw\PYZus{}C}\PY{o}{+}\PY{l+m+mi}{5}\PY{o}{*}\PY{n}{mmw\PYZus{}H}\PY{p}{)}\PY{p}{;} \PY{n}{mmw\PYZus{}PbTet}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}64}]:}
+    
+    \(322 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    Now each case has a different composition, given in terms of volume
+mixing ratio.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}66}]:} \PY{c+c1}{\PYZsh{} Cases}
          \PY{c+c1}{\PYZsh{}(i)}
          \PY{n}{fXe} \PY{o}{=} \PY{l+m+mf}{0.5}
          \PY{n}{fCH4} \PY{o}{=} \PY{l+m+mf}{0.5}
@@ -386,16 +422,11 @@ Xe = 130, C = 12, H = 1, He = 4, Pb = 206){]}.
          \PY{c+c1}{\PYZsh{}(iii)}
          \PY{n}{fHe} \PY{o}{=} \PY{l+m+mf}{0.5}
          \PY{n}{fCH4} \PY{o}{=} \PY{l+m+mf}{0.5}
-         
-         \PY{c+c1}{\PYZsh{} Heat capacity Cv = (R/2) * DOF}
-         \PY{c+c1}{\PYZsh{} where DOF\PYZti{} 3*(number of atoms)}
-         \PY{n}{Cv\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{l+m+mf}{3.}
-         \PY{n}{Cv\PYZus{}CH4} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{l+m+mf}{5.}\PY{p}{)}
-         \PY{n}{Cv\PYZus{}PbTet} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{l+m+mf}{29.}\PY{p}{)}
-         \PY{n}{Cv\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{l+m+mf}{3.}
 \end{Verbatim}
 
-    From the notes,\\
+    \subsubsection{Part a)}\label{part-a}
+
+From the notes,\\
 \[ T = T_{ref} \left ( \frac{P}{P_{ref}} \right ) ^{\frac{\gamma - 1}{\gamma}} \]\\
 where \(\gamma\) is the ratio of specific heats (\(\gamma = c_p/c_v\)).
 Solving for P,\\
@@ -404,31 +435,32 @@ which can be used to find the surface pressure using the P,T known at
 200 mbar and the surface temperature. We can use kinetic theory to
 relate \(\gamma\) to the number of degrees of freedom available to a gas
 particle via the following relation,\\
-\[ \gamma = 1 + \frac{2}{N_{dof}} \]. Finally, using the simplifying
+\[ \gamma = 1 + \frac{2}{N_{dof}} .\] Finally, using the simplifying
 assumption that \(N_{dof} = 3N\), where \(N\) is the number of atoms, we
 get the following relation:\\
 \[ P = P_{ref} \left ( \frac{T}{T_{ref}} \right ) ^{1+\frac{N_{dof}}{2}} \]
 
-    \subsubsection{Part a)}\label{part-a}
+Let's write the above equation as a function so we can call it multiple
+times.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}162}]:} \PY{k}{def} \PY{n+nf}{P1}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{Pr}\PY{p}{,} \PY{n}{Tr}\PY{p}{,} \PY{n}{Ndof}\PY{p}{)}\PY{p}{:}
-              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
-          \PY{l+s+sd}{    Calculate the pressure assuming a known reference temperature and pressure, a deeper temperature, }
-          \PY{l+s+sd}{    and assuming a dry adiabat.}
-          \PY{l+s+sd}{    }
-          \PY{l+s+sd}{    Parameters}
-          \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
-          \PY{l+s+sd}{    T : Temperature at which to determine the pressure}
-          \PY{l+s+sd}{    Pr : Reference pressure}
-          \PY{l+s+sd}{    Tr : Reference temperature}
-          \PY{l+s+sd}{    Ndof : Gas number of degrees of freedom}
-          \PY{l+s+sd}{    }
-          \PY{l+s+sd}{    Returns}
-          \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
-          \PY{l+s+sd}{    P1 : Pressure are given T}
-          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
-              \PY{k}{return} \PY{n}{Pr} \PY{o}{*} \PY{p}{(}\PY{n}{T} \PY{o}{/} \PY{n}{Tr}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{n}{Ndof}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}65}]:} \PY{k}{def} \PY{n+nf}{P1}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{Pr}\PY{p}{,} \PY{n}{Tr}\PY{p}{,} \PY{n}{Ndof}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{l+s+sd}{    Calculate the pressure assuming a known reference temperature and pressure, a deeper temperature, }
+         \PY{l+s+sd}{    and assuming a dry adiabat.}
+         \PY{l+s+sd}{    }
+         \PY{l+s+sd}{    Parameters}
+         \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+         \PY{l+s+sd}{    T : Temperature at which to determine the pressure}
+         \PY{l+s+sd}{    Pr : Reference pressure}
+         \PY{l+s+sd}{    Tr : Reference temperature}
+         \PY{l+s+sd}{    Ndof : Gas number of degrees of freedom}
+         \PY{l+s+sd}{    }
+         \PY{l+s+sd}{    Returns}
+         \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+         \PY{l+s+sd}{    P1 : Pressure at given T}
+         \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+             \PY{k}{return} \PY{n}{Pr} \PY{o}{*} \PY{p}{(}\PY{n}{T} \PY{o}{/} \PY{n}{Tr}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{n}{Ndof}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{)}
 \end{Verbatim}
 
     We will determine the number of degrees of freedom in a mixed gas by
@@ -436,22 +468,21 @@ weighting the individual gas constituents by their respective volume
 mixing ratios.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}163}]:} \PY{c+c1}{\PYZsh{} Set the number of atoms for each gas}
-          \PY{n}{N\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{1.}
-          \PY{n}{N\PYZus{}CH4} \PY{o}{=} \PY{l+m+mf}{5.}
-          \PY{n}{N\PYZus{}PbT} \PY{o}{=} \PY{l+m+mf}{29.}
-          \PY{n}{N\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{1.0}
-          
-          
-          \PY{c+c1}{\PYZsh{} Compute the Number of degrees of freedom for each case}
-          \PY{n}{Ndof1} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fXe}\PY{o}{*}\PY{n}{N\PYZus{}Xe} \PY{o}{+} \PY{n}{fCH4}\PY{o}{*}\PY{n}{N\PYZus{}CH4}\PY{p}{)}
-          \PY{n}{Ndof2} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fPbTet}\PY{o}{*}\PY{n}{N\PYZus{}PbT}\PY{p}{)}
-          \PY{n}{Ndof3} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fHe}\PY{o}{*}\PY{n}{N\PYZus{}He} \PY{o}{+} \PY{n}{fCH4}\PY{o}{*}\PY{n}{N\PYZus{}CH4}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} print intermediate values for checking math}
-          \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{N\PYZus{}dof:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Ndof1}\PY{p}{,} \PY{n}{Ndof2}\PY{p}{,} \PY{n}{Ndof3}
-          \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gamma:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof1}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof3}\PY{p}{)}
-          \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{exponent:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof1}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof2}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof3}\PY{o}{/}\PY{l+m+mf}{2.}
+{\color{incolor}In [{\color{incolor}67}]:} \PY{c+c1}{\PYZsh{} Set the number of atoms for each gas}
+         \PY{n}{N\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{1.}
+         \PY{n}{N\PYZus{}CH4} \PY{o}{=} \PY{l+m+mf}{5.}
+         \PY{n}{N\PYZus{}PbT} \PY{o}{=} \PY{l+m+mf}{29.}
+         \PY{n}{N\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{1.0}
+         
+         \PY{c+c1}{\PYZsh{} Compute the Number of degrees of freedom for each case}
+         \PY{n}{Ndof1} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fXe}\PY{o}{*}\PY{n}{N\PYZus{}Xe} \PY{o}{+} \PY{n}{fCH4}\PY{o}{*}\PY{n}{N\PYZus{}CH4}\PY{p}{)}
+         \PY{n}{Ndof2} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fPbTet}\PY{o}{*}\PY{n}{N\PYZus{}PbT}\PY{p}{)}
+         \PY{n}{Ndof3} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fHe}\PY{o}{*}\PY{n}{N\PYZus{}He} \PY{o}{+} \PY{n}{fCH4}\PY{o}{*}\PY{n}{N\PYZus{}CH4}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} print intermediate values for checking math}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{N\PYZus{}dof:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Ndof1}\PY{p}{,} \PY{n}{Ndof2}\PY{p}{,} \PY{n}{Ndof3}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gamma:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof1}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof3}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{exponent:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof1}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof2}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof3}\PY{o}{/}\PY{l+m+mf}{2.}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -465,8 +496,8 @@ exponent: 5.5 44.5 5.5
 atmosphere, we calculate the surface pressures given below:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{Pi} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof1}\PY{p}{)}
-         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (i) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Pi}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{Pi} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof1}\PY{p}{)}
+        \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (i) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Pi}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -475,8 +506,8 @@ Surface pressure for case (i) is 9.05096679919 bar
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}26}]:} \PY{n}{Pii} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof2}\PY{p}{)}
-         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (ii) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Pii}
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{Pii} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof2}\PY{p}{)}
+        \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (ii) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Pii}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -485,8 +516,8 @@ Surface pressure for case (ii) is 4.97582161916e+12 bar
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{Piii} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof3}\PY{p}{)}
-         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (iii) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Piii}
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{Piii} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof3}\PY{p}{)}
+        \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (iii) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Piii}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -502,9 +533,9 @@ The atmospheric pressure scale height is\\
     Define the Boltzmann Constant,
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}73}]:} \PY{n}{k} \PY{o}{=} \PY{l+m+mf}{1.38064852e\PYZhy{}23} \PY{o}{*} \PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*}\PY{n}{u}\PY{o}{.}\PY{n}{kg} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{p}{)}\PY{p}{;} \PY{n}{k}
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{k} \PY{o}{=} \PY{l+m+mf}{1.38064852e\PYZhy{}23} \PY{o}{*} \PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*}\PY{n}{u}\PY{o}{.}\PY{n}{kg} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{p}{)}\PY{p}{;} \PY{n}{k}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}73}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}10}]:}
     
     \(1.3806485 \times 10^{-20} \; \mathrm{\frac{m^{2}\,g}{K\,s^{2}}}\)
 
@@ -513,7 +544,7 @@ The atmospheric pressure scale height is\\
     and the pressure scale height.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}51}]:} \PY{k}{def} \PY{n+nf}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{g}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{n}{k}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}11}]:} \PY{k}{def} \PY{n+nf}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{g}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{n}{k}\PY{p}{)}\PY{p}{:}
              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
              \PY{k}{return} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{m} \PY{o}{*} \PY{n}{g}\PY{p}{)}
@@ -522,9 +553,9 @@ The atmospheric pressure scale height is\\
     Assuming the gravity is the same as that on Earth
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}29}]:} \PY{n}{g} \PY{o}{=} \PY{l+m+mf}{9.8} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{s}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g}
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{g} \PY{o}{=} \PY{l+m+mf}{9.8} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{s}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}29}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}12}]:}
     
     \(9.8 \; \mathrm{\frac{m}{s^{2}}}\)
 
@@ -533,9 +564,9 @@ The atmospheric pressure scale height is\\
     Set Avagadro's Number:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}38}]:} \PY{n}{NA} \PY{o}{=} \PY{l+m+mf}{6.022140857e23} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{;} \PY{n}{NA}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{NA} \PY{o}{=} \PY{l+m+mf}{6.022140857e23} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{;} \PY{n}{NA}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}38}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}13}]:}
     
     \(6.0221409 \times 10^{23} \; \mathrm{\frac{1}{mol}}\)
 
@@ -544,27 +575,27 @@ The atmospheric pressure scale height is\\
     Calculate the mean molecular weight for each possible case:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}128}]:} \PY{n}{mu1} \PY{o}{=} \PY{p}{(}\PY{n}{fXe} \PY{o}{*} \PY{n}{mmw\PYZus{}Xe} \PY{o}{+} \PY{n}{fCH4} \PY{o}{*} \PY{n}{mmw\PYZus{}CH4}\PY{p}{)}\PY{p}{;} \PY{n}{mu1}
+{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{mu1} \PY{o}{=} \PY{p}{(}\PY{n}{fXe} \PY{o}{*} \PY{n}{mmw\PYZus{}Xe} \PY{o}{+} \PY{n}{fCH4} \PY{o}{*} \PY{n}{mmw\PYZus{}CH4}\PY{p}{)}\PY{p}{;} \PY{n}{mu1}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}128}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}14}]:}
     
     \(73 \; \mathrm{\frac{g}{mol}}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}132}]:} \PY{n}{mu2} \PY{o}{=} \PY{p}{(}\PY{n}{fPbTet} \PY{o}{*} \PY{n}{mmw\PYZus{}PbTet}\PY{p}{)}\PY{p}{;} \PY{n}{mu2}
+{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{mu2} \PY{o}{=} \PY{p}{(}\PY{n}{fPbTet} \PY{o}{*} \PY{n}{mmw\PYZus{}PbTet}\PY{p}{)}\PY{p}{;} \PY{n}{mu2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}132}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}15}]:}
     
     \(322 \; \mathrm{\frac{g}{mol}}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}131}]:} \PY{n}{mu3} \PY{o}{=} \PY{p}{(}\PY{n}{fHe} \PY{o}{*} \PY{n}{mmw\PYZus{}He} \PY{o}{+} \PY{n}{fCH4} \PY{o}{*} \PY{n}{mmw\PYZus{}CH4}\PY{p}{)}\PY{p}{;} \PY{n}{mu3}
+{\color{incolor}In [{\color{incolor}16}]:} \PY{n}{mu3} \PY{o}{=} \PY{p}{(}\PY{n}{fHe} \PY{o}{*} \PY{n}{mmw\PYZus{}He} \PY{o}{+} \PY{n}{fCH4} \PY{o}{*} \PY{n}{mmw\PYZus{}CH4}\PY{p}{)}\PY{p}{;} \PY{n}{mu3}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}131}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}16}]:}
     
     \(10 \; \mathrm{\frac{g}{mol}}\)
 
@@ -573,27 +604,27 @@ The atmospheric pressure scale height is\\
     Calculate the mean atmospheric mass for each possible case:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}133}]:} \PY{n}{m1} \PY{o}{=} \PY{n}{mu1} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m1}
+{\color{incolor}In [{\color{incolor}17}]:} \PY{n}{m1} \PY{o}{=} \PY{n}{mu1} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m1}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}133}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}17}]:}
     
     \(1.2121935 \times 10^{-22} \; \mathrm{g}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}134}]:} \PY{n}{m2} \PY{o}{=} \PY{n}{mu2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m2}
+{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{m2} \PY{o}{=} \PY{n}{mu2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}134}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}18}]:}
     
     \(5.3469357 \times 10^{-22} \; \mathrm{g}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}135}]:} \PY{n}{m3} \PY{o}{=} \PY{n}{mu3} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m3}
+{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{m3} \PY{o}{=} \PY{n}{mu3} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m3}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}135}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}19}]:}
     
     \(1.660539 \times 10^{-23} \; \mathrm{g}\)
 
@@ -610,27 +641,27 @@ give a reasonable approximation of the extent of the atmosphere
 \emph{above} 200 mbar.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}136}]:} \PY{n}{H1} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m1}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H1}
+{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{H1} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m1}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H1}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}136}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}20}]:}
     
     \(3.1746965 \; \mathrm{km}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}137}]:} \PY{n}{H2} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m2}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H2}
+{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{H2} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m2}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}137}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}21}]:}
     
     \(0.71972932 \; \mathrm{km}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}138}]:} \PY{n}{H3} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m3}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H3}
+{\color{incolor}In [{\color{incolor}22}]:} \PY{n}{H3} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m3}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H3}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}138}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}22}]:}
     
     \(23.175284 \; \mathrm{km}\)
 
@@ -663,45 +694,45 @@ g/mol). {[}4 pts{]}
 Here's what we know:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}67}]:} \PY{n}{P2} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{P2}
+{\color{incolor}In [{\color{incolor}23}]:} \PY{n}{P2} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{P2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}67}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}23}]:}
     
     \(1 \; \mathrm{bar}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}146}]:} \PY{n}{T2} \PY{o}{=} \PY{l+m+mf}{60.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T2}
+{\color{incolor}In [{\color{incolor}24}]:} \PY{n}{T2} \PY{o}{=} \PY{l+m+mf}{60.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}146}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}24}]:}
     
     \(60 \; \mathrm{K}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}82}]:} \PY{n}{m\PYZus{}payload} \PY{o}{=} \PY{l+m+mf}{30.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{p}{;} \PY{n}{m\PYZus{}payload} 
+{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{m\PYZus{}payload} \PY{o}{=} \PY{l+m+mf}{30.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{p}{;} \PY{n}{m\PYZus{}payload} 
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}82}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}25}]:}
     
     \(30 \; \mathrm{kg}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}71}]:} \PY{n}{T\PYZus{}hot\PYZus{}air} \PY{o}{=} \PY{l+m+mf}{100.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T\PYZus{}hot\PYZus{}air}
+{\color{incolor}In [{\color{incolor}26}]:} \PY{n}{T\PYZus{}hot\PYZus{}air} \PY{o}{=} \PY{l+m+mf}{100.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T\PYZus{}hot\PYZus{}air}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}71}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}26}]:}
     
     \(100 \; \mathrm{K}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}72}]:} \PY{n}{mu\PYZus{}Nep} \PY{o}{=} \PY{l+m+mf}{2.6} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{mu\PYZus{}Nep}
+{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{mu\PYZus{}Nep} \PY{o}{=} \PY{l+m+mf}{2.6} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{mu\PYZus{}Nep}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}72}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}27}]:}
     
     \(2.6 \; \mathrm{\frac{g}{mol}}\)
 
@@ -726,9 +757,9 @@ the buoyant force. We'll calculate the density of an ideal gas:
 Inside the balloon the density is:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}144}]:} \PY{n}{rho\PYZus{}in} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{mu\PYZus{}Nep} \PY{o}{/} \PY{n}{NA}\PY{p}{)} \PY{o}{*} \PY{n}{P2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T\PYZus{}hot\PYZus{}air}\PY{p}{)}\PY{p}{;} \PY{n}{rho\PYZus{}in} 
+{\color{incolor}In [{\color{incolor}28}]:} \PY{n}{rho\PYZus{}in} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{mu\PYZus{}Nep} \PY{o}{/} \PY{n}{NA}\PY{p}{)} \PY{o}{*} \PY{n}{P2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T\PYZus{}hot\PYZus{}air}\PY{p}{)}\PY{p}{;} \PY{n}{rho\PYZus{}in} 
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}144}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}28}]:}
     
     \(0.31270823 \; \mathrm{\frac{kg}{m^{3}}}\)
 
@@ -737,9 +768,9 @@ Inside the balloon the density is:
     and outside the balloon the density is:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}147}]:} \PY{n}{rho\PYZus{}out} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{mu\PYZus{}Nep} \PY{o}{/} \PY{n}{NA}\PY{p}{)} \PY{o}{*} \PY{n}{P2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T2}\PY{p}{)}\PY{p}{;} \PY{n}{rho\PYZus{}out}
+{\color{incolor}In [{\color{incolor}29}]:} \PY{n}{rho\PYZus{}out} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{mu\PYZus{}Nep} \PY{o}{/} \PY{n}{NA}\PY{p}{)} \PY{o}{*} \PY{n}{P2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T2}\PY{p}{)}\PY{p}{;} \PY{n}{rho\PYZus{}out}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}147}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}29}]:}
     
     \(0.52118038 \; \mathrm{\frac{kg}{m^{3}}}\)
 
@@ -748,9 +779,9 @@ Inside the balloon the density is:
     Now we'll solve for the balloon volume,
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}159}]:} \PY{n}{V} \PY{o}{=} \PY{n}{m\PYZus{}payload} \PY{o}{/} \PY{p}{(}\PY{n}{rho\PYZus{}out} \PY{o}{\PYZhy{}} \PY{n}{rho\PYZus{}in}\PY{p}{)}\PY{p}{;} \PY{n}{V}
+{\color{incolor}In [{\color{incolor}30}]:} \PY{n}{V} \PY{o}{=} \PY{n}{m\PYZus{}payload} \PY{o}{/} \PY{p}{(}\PY{n}{rho\PYZus{}out} \PY{o}{\PYZhy{}} \PY{n}{rho\PYZus{}in}\PY{p}{)}\PY{p}{;} \PY{n}{V}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}159}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}30}]:}
     
     \(143.90411 \; \mathrm{m^{3}}\)
 
@@ -760,9 +791,9 @@ Inside the balloon the density is:
 \[ V = \frac{4}{3} \pi R^3 \rightarrow R = \left ( \frac{3V}{4 \pi} \right ) ^{1/3}\]
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}161}]:} \PY{n}{R} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{n}{V}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{4.} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{/}\PY{l+m+mf}{3.}\PY{p}{)}\PY{p}{;} \PY{n}{R}
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{R} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{n}{V}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{4.} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{/}\PY{l+m+mf}{3.}\PY{p}{)}\PY{p}{;} \PY{n}{R}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}161}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}31}]:}
     
     \(3.2508345 \; \mathrm{m}\)
 
@@ -824,12 +855,12 @@ Our solution now simplifies to:
 
 \subsubsection{Part 2:}\label{part-2}
 
-Starting the isothermal temperature of
+We'll start with the isothermal temperature of
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}169}]:} \PY{n}{T3} \PY{o}{=} \PY{l+m+mi}{90} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T3}
+{\color{incolor}In [{\color{incolor}32}]:} \PY{n}{T3} \PY{o}{=} \PY{l+m+mi}{90} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T3}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}169}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}32}]:}
     
     \(90 \; \mathrm{K}\)
 
@@ -838,9 +869,9 @@ Starting the isothermal temperature of
     The mean molecular weight for hydrogen gas:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}165}]:} \PY{n}{muH2} \PY{o}{=} \PY{l+m+mf}{2.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{muH2}
+{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{muH2} \PY{o}{=} \PY{l+m+mf}{2.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{muH2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}165}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}33}]:}
     
     \(2 \; \mathrm{\frac{g}{mol}}\)
 
@@ -849,9 +880,9 @@ Starting the isothermal temperature of
     which, in grams, is
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}166}]:} \PY{n}{mH2} \PY{o}{=} \PY{n}{muH2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{mH2}
+{\color{incolor}In [{\color{incolor}34}]:} \PY{n}{mH2} \PY{o}{=} \PY{n}{muH2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{mH2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}166}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}34}]:}
     
     \(3.3210781 \times 10^{-24} \; \mathrm{g}\)
 
@@ -860,9 +891,9 @@ Starting the isothermal temperature of
     The gravity of Titan:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}167}]:} \PY{n}{g\PYZus{}titan} \PY{o}{=} \PY{l+m+mf}{1.37} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g\PYZus{}titan}
+{\color{incolor}In [{\color{incolor}35}]:} \PY{n}{g\PYZus{}titan} \PY{o}{=} \PY{l+m+mf}{1.37} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g\PYZus{}titan}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}167}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}35}]:}
     
     \(1.37 \; \mathrm{\frac{m}{s^{2}}}\)
 
@@ -871,9 +902,9 @@ Starting the isothermal temperature of
     We calculate the pressure scale height to be:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}171}]:} \PY{n}{H3} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T3}\PY{p}{,} \PY{n}{mH2}\PY{p}{,} \PY{n}{g\PYZus{}titan}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H3}
+{\color{incolor}In [{\color{incolor}36}]:} \PY{n}{H3} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T3}\PY{p}{,} \PY{n}{mH2}\PY{p}{,} \PY{n}{g\PYZus{}titan}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H3}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}171}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}36}]:}
     
     \(273.1027 \; \mathrm{km}\)
 
@@ -882,9 +913,9 @@ Starting the isothermal temperature of
     Titan's radius is
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}172}]:} \PY{n}{R\PYZus{}titan} \PY{o}{=} \PY{l+m+mf}{2576.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{;} \PY{n}{R\PYZus{}titan}
+{\color{incolor}In [{\color{incolor}37}]:} \PY{n}{R\PYZus{}titan} \PY{o}{=} \PY{l+m+mf}{2576.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{;} \PY{n}{R\PYZus{}titan}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}172}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}37}]:}
     
     \(2576 \; \mathrm{km}\)
 
@@ -894,9 +925,9 @@ Starting the isothermal temperature of
 pressure scale height would have been
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}175}]:} \PY{n}{H3} \PY{o}{/} \PY{n}{R\PYZus{}titan} \PY{o}{*} \PY{l+m+mi}{100} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{percent}
+{\color{incolor}In [{\color{incolor}38}]:} \PY{n}{H3} \PY{o}{/} \PY{n}{R\PYZus{}titan} \PY{o}{*} \PY{l+m+mi}{100} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{percent}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}175}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}38}]:}
     
     \(10.601813 \; \mathrm{\%}\)
 
@@ -958,70 +989,88 @@ abundance of CO2 of 8000 cm-amagat.
 
     \subsubsection{Part 1:}\label{part-1}
 
+Let's define the atm unit of pressure in terms of bars:
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}189}]:} \PY{n}{atm} \PY{o}{=} \PY{l+m+mf}{1.01325} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{atm}
+{\color{incolor}In [{\color{incolor}43}]:} \PY{n}{atm} \PY{o}{=} \PY{l+m+mf}{1.01325} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{atm}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}189}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}43}]:}
     
     \(1.01325 \; \mathrm{bar}\)
 
     
 
+    Then the column abundance thing (\(\mathcal{N}\)) is
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}193}]:} \PY{n}{Nc} \PY{o}{=} \PY{l+m+mf}{8000.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{cm}\PY{o}{*} \PY{n}{atm} \PY{p}{;}\PY{n}{Nc}
+{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{N} \PY{o}{=} \PY{l+m+mf}{8000.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{cm}\PY{o}{*} \PY{n}{atm} \PY{p}{;}\PY{n}{N}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}193}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}44}]:}
     
     \(8106 \; \mathrm{bar\,cm}\)
 
     
 
+    The mean molecular weight of CO\(_2\) is
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}185}]:} \PY{n}{muCO2} \PY{o}{=} \PY{l+m+mf}{44.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{muCO2}
+{\color{incolor}In [{\color{incolor}45}]:} \PY{n}{muCO2} \PY{o}{=} \PY{l+m+mf}{44.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{muCO2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}185}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}45}]:}
     
     \(44 \; \mathrm{\frac{g}{mol}}\)
 
     
 
+    which is
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}187}]:} \PY{n}{mCO2} \PY{o}{=} \PY{n}{muCO2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{mCO2}
+{\color{incolor}In [{\color{incolor}46}]:} \PY{n}{mCO2} \PY{o}{=} \PY{n}{muCO2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{mCO2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}187}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}46}]:}
     
     \(7.3063718 \times 10^{-23} \; \mathrm{g}\)
 
     
 
+    Finall, the gravity of Mars and the Loschmidt number are
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}186}]:} \PY{n}{g\PYZus{}mars} \PY{o}{=} \PY{l+m+mf}{3.72} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g\PYZus{}mars}
+{\color{incolor}In [{\color{incolor}47}]:} \PY{n}{g\PYZus{}mars} \PY{o}{=} \PY{l+m+mf}{3.72} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g\PYZus{}mars}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}186}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}47}]:}
     
     \(3.72 \; \mathrm{\frac{m}{s^{2}}}\)
 
     
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}181}]:} \PY{n}{n0} \PY{o}{=} \PY{l+m+mf}{2.687e19} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{cm}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{;} \PY{n}{n0}
+{\color{incolor}In [{\color{incolor}48}]:} \PY{n}{n0} \PY{o}{=} \PY{l+m+mf}{2.687e19} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{cm}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{;} \PY{n}{n0}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}181}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}48}]:}
     
     \(2.687 \times 10^{19} \; \mathrm{\frac{1}{cm^{3}}}\)
 
     
 
-    \[ p(z) = N_c(z) \bar{m} g \]
+    From the notes, we can calculate pressure from the column abundance,
+atmospheric mass, and gravity using this relation\\
+\[ p(z) = N_c(z) \bar{m} g \]\\
+where true column abundance can be computed from via,\\
+\[ N_c(z) = n_0 \mathcal{N} \]\\
+This gives the following in fundamental SI unit bases:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}210}]:} \PY{n}{p\PYZus{}mars} \PY{o}{=} \PY{n}{Nc}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{n0}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{mCO2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{g\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{p\PYZus{}mars}
+{\color{incolor}In [{\color{incolor}50}]:} \PY{n}{p\PYZus{}mars1} \PY{o}{=} \PY{n}{N}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{n0}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{mCO2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{g\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{p\PYZus{}mars1}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}210}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}50}]:}
     
     \(59199627 \; \mathrm{\frac{kg^{2}}{m^{2}\,s^{4}}}\)
 
     
+
+    Note that the fundamental SI units of pressure are
+\(\frac{\text{kg}}{\text{m s}^2}\), e.g.
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}188}]:} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}
@@ -1032,39 +1081,21 @@ abundance of CO2 of 8000 cm-amagat.
 
     
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}191}]:} \PY{n}{Nc}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}191}]:}
-    
-    \(8106000 \; \mathrm{\frac{kg}{s^{2}}}\)
-
-    
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}195}]:} \PY{n}{p\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}195}]:}
-    
-    \(59199627 \; \mathrm{\frac{kg^{2}}{m^{2}\,s^{4}}}\)
-
-    
-
-    This equation from the notes:
+    We have calculated something that has units of pressure squared!
+Therefore, it would seems that this equation from the notes:
 
 \[ p(z) = N_c(z) \bar{m} g \]
 
-doesn't have the correct units. The RHS has units of pressure squared. I
-think the correct equation should be:
+should actually be:
 
 \[ p(z) = \sqrt{N_c(z) \bar{m} g} \]
 
 Using this expression we get:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}213}]:} \PY{n}{p\PYZus{}mars} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{p}{(}\PY{n}{n0} \PY{o}{*} \PY{n}{Nc}\PY{p}{)}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{g\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{mCO2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{;} \PY{n}{p\PYZus{}mars}
+{\color{incolor}In [{\color{incolor}53}]:} \PY{n}{p\PYZus{}mars2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{p}{(}\PY{n}{n0} \PY{o}{*} \PY{n}{N}\PY{p}{)}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{g\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{mCO2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{;} \PY{n}{p\PYZus{}mars2}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}213}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}53}]:}
     
     \(7694.1294 \; \mathrm{\frac{kg}{m\,s^{2}}}\)
 
@@ -1073,9 +1104,9 @@ Using this expression we get:
     Converting to bars, this is
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}230}]:} \PY{n}{ppp} \PY{o}{=} \PY{p}{(}\PY{n}{p\PYZus{}mars} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{ppp}
+{\color{incolor}In [{\color{incolor}55}]:} \PY{n}{p\PYZus{}mars2\PYZus{}bar} \PY{o}{=} \PY{p}{(}\PY{n}{p\PYZus{}mars2} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{p\PYZus{}mars2\PYZus{}bar}
 \end{Verbatim}
-\texttt{\color{outcolor}Out[{\color{outcolor}230}]:}
+\texttt{\color{outcolor}Out[{\color{outcolor}55}]:}
     
     \(0.076941294 \; \mathrm{bar}\)
 
@@ -1097,7 +1128,7 @@ from these longer paths, which encounter more CO\(_2\) molecules, and
 bias us towards higher surface pressures if we misinterpret it for only
 the sub-observer view.
 
-Since the true surface pressure to the CO\(_2\)-dominated Martian
+Since the true surface pressure of the CO\(_2\)-dominated Martian
 atmosphere is \({\sim}6\) mbar, we are off by a factor of about 10. So
 perhaps the weighting factor is 10 or, better yet, \(\pi^2\), since that
 is the area of the disk in normalized units.
@@ -1105,7 +1136,8 @@ is the area of the disk in normalized units.
 To rigorously solve for the difference between inferred surface
 pressures using the nadir and disk-integrated views we must calculate
 the disk-averaged path length to the surface. This requires some
-geometry and a 2D integral over the visible disk of Mars.
+geometry and a 2D integral over the visible disk of Mars. The answer is
+probably \(\pi^2\).
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor} }]:} 
