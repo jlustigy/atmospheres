@@ -1,0 +1,1119 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font than Computer Modern for most use cases
+    \usepackage{palatino}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{homework1}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+        \PY{k+kn}{import} \PY{n+nn}{os}
+        \PY{k+kn}{import} \PY{n+nn}{sys}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{scipy} \PY{k+kn}{as} \PY{n+nn}{sp}
+        \PY{k+kn}{import} \PY{n+nn}{scipy.optimize}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k+kn}{as} \PY{n+nn}{mpl}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib.colors} \PY{k+kn}{as} \PY{n+nn}{colors}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k+kn}{import} \PY{n}{gridspec}
+        \PY{k+kn}{from} \PY{n+nn}{matplotlib} \PY{k+kn}{import} \PY{n}{rc}
+        \PY{k+kn}{import} \PY{n+nn}{pdb}
+        
+        \PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{font.size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{25.0}
+        \PY{n}{rc}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{text}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{n+nb+bp}{True}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{k+kn}{import} \PY{n+nn}{astropy.units} \PY{k+kn}{as} \PY{n+nn}{u}
+\end{Verbatim}
+
+    \subsection{Problem 1:}\label{problem-1}
+
+\begin{quote}
+{[}16 points total{]} In the future, planetary astronomers discover an
+inhabited extrasolar planet, which they call ``Houston2''. This planet
+has a foul and noxious polluted atmosphere, which the media speculates
+is caused by incessant, unregulated industrial activity. However, all
+that is really known is that the atmosphere is rich in hydrocarbons,
+that the temperature at the 200-mbar level in the atmosphere is 273.16
+K, and that the surface temperature is 546.32 K. The astronomers all
+agree that the atmosphere has an essentially adiabatic structure. But
+there are three camps regarding the atmospheric composition: (i) one
+group believes that the atmosphere is 50\% by volume Xe and 50\%
+methane. (ii) the other group believes that the atmosphere is pure lead
+tetraethyl Pb(C2H5)4 --- the unwelcome substance found in leaded
+gasoline (iii) a final group argue for a composition of 50\% He and 50\%
+methane.
+\end{quote}
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  What is the surface atmospheric pressure on ``Houston2'' in each model
+  (i) through (iii)? {[}12 pts{]}\\
+\item
+  Explain how atmospheres (i) and (iii) will differ in their vertical
+  extent? You can assume that Houston2 has the same gravity as the
+  Earth, and a useful thing to do would be to compare heights at the 0.2
+  bar level. {[}4 pts{]}
+\end{enumerate}
+\end{quote}
+
+\begin{quote}
+{[}In answering part (a), you will need heat capacity. Go and look at a
+thermal physics textbook. You'll find that each degree of freedom of a
+molecule or atom contributes R/2 to Cv, the molar heat capacity at
+constant volume. For a molecule of N atoms, there are 3N degrees of
+freedom. For example, for He there are 3N = 3 degrees of freedom
+corresponding to 3 translational modes in the x, y and z directions, so
+that Cv = 3R/2. For CO, for example, there are 3N = 6 degrees of freedom
+corresponding to 3 translational modes, 1 vibrational mode and 2
+rotational modes. But whether certain modes are excited depends on
+temperature. H2, for example, has Cv = 3R/2 at 40K, Cv \textasciitilde{}
+5R/2 at 300K and CV = 6R/2 at 2000K and approaches 7R/2 in the limit (H2
+dissociates before it gets there). Each vibrational mode has a kinetic
+part associated with movement of atoms and a potential part like spring
+energy in a simple harmonic oscillator, which can constitute two dofs.
+So the maximum possible Cv = (3 trans. + 2 rots + 2 vibs)R/2 = 7R/2 for
+a diatomic molecule. At room temperature, vibrational modes tend to be
+inactive, so Cv = 5R/2 for most diatomic molecules. For the purpose of
+this homework, ignore these complications and assume that the 3N rule
+holds. Recall also that molar heat capacity at constant pressure is
+related to Cv via the equation Cp = Cv + R. (Data: Masses in grams/mole:
+Xe = 130, C = 12, H = 1, He = 4, Pb = 206){]}.
+\end{quote}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} Known quantities}
+         \PY{n}{T200} \PY{o}{=} \PY{l+m+mf}{273.16} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}
+         \PY{n}{P200} \PY{o}{=} \PY{l+m+mf}{200.0} \PY{o}{*} \PY{l+m+mf}{1e\PYZhy{}3} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}
+         \PY{n}{Tsurf} \PY{o}{=} \PY{l+m+mf}{546.32} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}
+         
+         \PY{c+c1}{\PYZsh{} Define gram/mol unit}
+         \PY{n}{amu} \PY{o}{=} \PY{n}{u}\PY{o}{.}\PY{n}{gram} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}
+         
+         \PY{c+c1}{\PYZsh{} Masses of atoms in grams/mol}
+         \PY{n}{mmw\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{130.} \PY{o}{*} \PY{n}{amu}
+         \PY{n}{mmw\PYZus{}C} \PY{o}{=} \PY{l+m+mf}{12.} \PY{o}{*} \PY{n}{amu}
+         \PY{n}{mmw\PYZus{}H} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{*}\PY{n}{amu}
+         \PY{n}{mmw\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{4.0} \PY{o}{*} \PY{n}{amu}
+         \PY{n}{mmw\PYZus{}Pb} \PY{o}{=} \PY{l+m+mf}{206.} \PY{o}{*} \PY{n}{amu}
+         
+         \PY{c+c1}{\PYZsh{} Mass of methane}
+         \PY{n}{mmw\PYZus{}CH4} \PY{o}{=} \PY{n}{mmw\PYZus{}C} \PY{o}{+} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{mmw\PYZus{}H}
+         
+         \PY{c+c1}{\PYZsh{} Mass of Lead Tetraethyl}
+         \PY{n}{mmw\PYZus{}PbTet} \PY{o}{=} \PY{n}{mmw\PYZus{}Pb} \PY{o}{+} \PY{l+m+mi}{4}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{mmw\PYZus{}C}\PY{o}{+}\PY{l+m+mi}{5}\PY{o}{*}\PY{n}{mmw\PYZus{}H}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Cases}
+         \PY{c+c1}{\PYZsh{}(i)}
+         \PY{n}{fXe} \PY{o}{=} \PY{l+m+mf}{0.5}
+         \PY{n}{fCH4} \PY{o}{=} \PY{l+m+mf}{0.5}
+         \PY{c+c1}{\PYZsh{}(ii)}
+         \PY{n}{fPbTet} \PY{o}{=} \PY{l+m+mf}{1.0}
+         \PY{c+c1}{\PYZsh{}(iii)}
+         \PY{n}{fHe} \PY{o}{=} \PY{l+m+mf}{0.5}
+         \PY{n}{fCH4} \PY{o}{=} \PY{l+m+mf}{0.5}
+         
+         \PY{c+c1}{\PYZsh{} Heat capacity Cv = (R/2) * DOF}
+         \PY{c+c1}{\PYZsh{} where DOF\PYZti{} 3*(number of atoms)}
+         \PY{n}{Cv\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{l+m+mf}{3.}
+         \PY{n}{Cv\PYZus{}CH4} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{l+m+mf}{5.}\PY{p}{)}
+         \PY{n}{Cv\PYZus{}PbTet} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{l+m+mf}{29.}\PY{p}{)}
+         \PY{n}{Cv\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{0.5} \PY{o}{*} \PY{l+m+mf}{3.}
+\end{Verbatim}
+
+    From the notes,\\
+\[ T = T_{ref} \left ( \frac{P}{P_{ref}} \right ) ^{\frac{\gamma - 1}{\gamma}} \]\\
+where \(\gamma\) is the ratio of specific heats (\(\gamma = c_p/c_v\)).
+Solving for P,\\
+\[ P = P_{ref} \left ( \frac{T}{T_{ref}} \right ) ^{\frac{\gamma}{\gamma - 1}} \]
+which can be used to find the surface pressure using the P,T known at
+200 mbar and the surface temperature. We can use kinetic theory to
+relate \(\gamma\) to the number of degrees of freedom available to a gas
+particle via the following relation,\\
+\[ \gamma = 1 + \frac{2}{N_{dof}} \]. Finally, using the simplifying
+assumption that \(N_{dof} = 3N\), where \(N\) is the number of atoms, we
+get the following relation:\\
+\[ P = P_{ref} \left ( \frac{T}{T_{ref}} \right ) ^{1+\frac{N_{dof}}{2}} \]
+
+    \subsubsection{Part a)}\label{part-a}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}162}]:} \PY{k}{def} \PY{n+nf}{P1}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{Pr}\PY{p}{,} \PY{n}{Tr}\PY{p}{,} \PY{n}{Ndof}\PY{p}{)}\PY{p}{:}
+              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{l+s+sd}{    Calculate the pressure assuming a known reference temperature and pressure, a deeper temperature, }
+          \PY{l+s+sd}{    and assuming a dry adiabat.}
+          \PY{l+s+sd}{    }
+          \PY{l+s+sd}{    Parameters}
+          \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+          \PY{l+s+sd}{    T : Temperature at which to determine the pressure}
+          \PY{l+s+sd}{    Pr : Reference pressure}
+          \PY{l+s+sd}{    Tr : Reference temperature}
+          \PY{l+s+sd}{    Ndof : Gas number of degrees of freedom}
+          \PY{l+s+sd}{    }
+          \PY{l+s+sd}{    Returns}
+          \PY{l+s+sd}{    \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+          \PY{l+s+sd}{    P1 : Pressure are given T}
+          \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+              \PY{k}{return} \PY{n}{Pr} \PY{o}{*} \PY{p}{(}\PY{n}{T} \PY{o}{/} \PY{n}{Tr}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{n}{Ndof}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{)}
+\end{Verbatim}
+
+    We will determine the number of degrees of freedom in a mixed gas by
+weighting the individual gas constituents by their respective volume
+mixing ratios.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}163}]:} \PY{c+c1}{\PYZsh{} Set the number of atoms for each gas}
+          \PY{n}{N\PYZus{}Xe} \PY{o}{=} \PY{l+m+mf}{1.}
+          \PY{n}{N\PYZus{}CH4} \PY{o}{=} \PY{l+m+mf}{5.}
+          \PY{n}{N\PYZus{}PbT} \PY{o}{=} \PY{l+m+mf}{29.}
+          \PY{n}{N\PYZus{}He} \PY{o}{=} \PY{l+m+mf}{1.0}
+          
+          
+          \PY{c+c1}{\PYZsh{} Compute the Number of degrees of freedom for each case}
+          \PY{n}{Ndof1} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fXe}\PY{o}{*}\PY{n}{N\PYZus{}Xe} \PY{o}{+} \PY{n}{fCH4}\PY{o}{*}\PY{n}{N\PYZus{}CH4}\PY{p}{)}
+          \PY{n}{Ndof2} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fPbTet}\PY{o}{*}\PY{n}{N\PYZus{}PbT}\PY{p}{)}
+          \PY{n}{Ndof3} \PY{o}{=} \PY{l+m+mf}{3.} \PY{o}{*} \PY{p}{(}\PY{n}{fHe}\PY{o}{*}\PY{n}{N\PYZus{}He} \PY{o}{+} \PY{n}{fCH4}\PY{o}{*}\PY{n}{N\PYZus{}CH4}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} print intermediate values for checking math}
+          \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{N\PYZus{}dof:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Ndof1}\PY{p}{,} \PY{n}{Ndof2}\PY{p}{,} \PY{n}{Ndof3}
+          \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gamma:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof1}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof2}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{+}\PY{l+m+mf}{2.}\PY{o}{/}\PY{n}{Ndof3}\PY{p}{)}
+          \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{exponent:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof1}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof2}\PY{o}{/}\PY{l+m+mf}{2.}\PY{p}{,} \PY{l+m+mi}{1}  \PY{o}{+} \PY{n}{Ndof3}\PY{o}{/}\PY{l+m+mf}{2.}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+N\_dof: 9.0 87.0 9.0
+gamma: 1.22222222222 1.02298850575 1.22222222222
+exponent: 5.5 44.5 5.5
+
+    \end{Verbatim}
+
+    Given a different number of degrees of freedom for each possible
+atmosphere, we calculate the surface pressures given below:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}25}]:} \PY{n}{Pi} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof1}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (i) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Pi}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Surface pressure for case (i) is 9.05096679919 bar
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{n}{Pii} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof2}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (ii) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Pii}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Surface pressure for case (ii) is 4.97582161916e+12 bar
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{Piii} \PY{o}{=} \PY{n}{P1}\PY{p}{(}\PY{n}{Tsurf}\PY{p}{,} \PY{n}{P200}\PY{p}{,} \PY{n}{T200}\PY{p}{,} \PY{n}{Ndof3}\PY{p}{)}
+         \PY{k}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Surface pressure for case (iii) is}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{Piii}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Surface pressure for case (iii) is 9.05096679919 bar
+
+    \end{Verbatim}
+
+    \subsubsection{Part b)}\label{part-b}
+
+The atmospheric pressure scale height is\\
+\[ H = \frac{k \bar{T}}{\bar{m} g } \]
+
+    Define the Boltzmann Constant,
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}73}]:} \PY{n}{k} \PY{o}{=} \PY{l+m+mf}{1.38064852e\PYZhy{}23} \PY{o}{*} \PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*}\PY{n}{u}\PY{o}{.}\PY{n}{kg} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{p}{)}\PY{p}{;} \PY{n}{k}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}73}]:}
+    
+    \(1.3806485 \times 10^{-20} \; \mathrm{\frac{m^{2}\,g}{K\,s^{2}}}\)
+
+    
+
+    and the pressure scale height.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}51}]:} \PY{k}{def} \PY{n+nf}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T}\PY{p}{,} \PY{n}{m}\PY{p}{,} \PY{n}{g}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{n}{k}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+             \PY{k}{return} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{m} \PY{o}{*} \PY{n}{g}\PY{p}{)}
+\end{Verbatim}
+
+    Assuming the gravity is the same as that on Earth
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}29}]:} \PY{n}{g} \PY{o}{=} \PY{l+m+mf}{9.8} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{s}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}29}]:}
+    
+    \(9.8 \; \mathrm{\frac{m}{s^{2}}}\)
+
+    
+
+    Set Avagadro's Number:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}38}]:} \PY{n}{NA} \PY{o}{=} \PY{l+m+mf}{6.022140857e23} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{;} \PY{n}{NA}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}38}]:}
+    
+    \(6.0221409 \times 10^{23} \; \mathrm{\frac{1}{mol}}\)
+
+    
+
+    Calculate the mean molecular weight for each possible case:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}128}]:} \PY{n}{mu1} \PY{o}{=} \PY{p}{(}\PY{n}{fXe} \PY{o}{*} \PY{n}{mmw\PYZus{}Xe} \PY{o}{+} \PY{n}{fCH4} \PY{o}{*} \PY{n}{mmw\PYZus{}CH4}\PY{p}{)}\PY{p}{;} \PY{n}{mu1}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}128}]:}
+    
+    \(73 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}132}]:} \PY{n}{mu2} \PY{o}{=} \PY{p}{(}\PY{n}{fPbTet} \PY{o}{*} \PY{n}{mmw\PYZus{}PbTet}\PY{p}{)}\PY{p}{;} \PY{n}{mu2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}132}]:}
+    
+    \(322 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}131}]:} \PY{n}{mu3} \PY{o}{=} \PY{p}{(}\PY{n}{fHe} \PY{o}{*} \PY{n}{mmw\PYZus{}He} \PY{o}{+} \PY{n}{fCH4} \PY{o}{*} \PY{n}{mmw\PYZus{}CH4}\PY{p}{)}\PY{p}{;} \PY{n}{mu3}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}131}]:}
+    
+    \(10 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    Calculate the mean atmospheric mass for each possible case:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}133}]:} \PY{n}{m1} \PY{o}{=} \PY{n}{mu1} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m1}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}133}]:}
+    
+    \(1.2121935 \times 10^{-22} \; \mathrm{g}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}134}]:} \PY{n}{m2} \PY{o}{=} \PY{n}{mu2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}134}]:}
+    
+    \(5.3469357 \times 10^{-22} \; \mathrm{g}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}135}]:} \PY{n}{m3} \PY{o}{=} \PY{n}{mu3} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{m3}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}135}]:}
+    
+    \(1.660539 \times 10^{-23} \; \mathrm{g}\)
+
+    
+
+    We'll calculate the pressure scale height at the 200 mbar level. The
+pressure scale height is only valid in isothermal regions of an
+atmosphere. However, 200 mbar is probably close to the tropopause
+(particularly because the temperature here is at zero degrees celsius
+perhaps hinting that water will freeze out around this level,
+contributing latent heat and cold trapping the water below). Using the
+temperature at this level to calculate the pressure scale height will
+give a reasonable approximation of the extent of the atmosphere
+\emph{above} 200 mbar.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}136}]:} \PY{n}{H1} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m1}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H1}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}136}]:}
+    
+    \(3.1746965 \; \mathrm{km}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}137}]:} \PY{n}{H2} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m2}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}137}]:}
+    
+    \(0.71972932 \; \mathrm{km}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}138}]:} \PY{n}{H3} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T200}\PY{p}{,} \PY{n}{m3}\PY{p}{,} \PY{n}{g}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H3}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}138}]:}
+    
+    \(23.175284 \; \mathrm{km}\)
+
+    
+
+    The pressure scale height gives us an estimate of the atmospheric
+extent. Since we know the temperature at 200 mbar and the gravity, then
+the scale height for the 3 possible cases is determined soley by the
+atmospheric mass. The pure lead tetraethyl atmosphere, which has a mean
+molecular weight of 322 g/mol, is the heaviest and therefore has the
+smallest atmospheric extent with a scale height of 0.72 km. On the other
+hand, the 50\% Helium, 50\% methane atmosphere has the lowest mass
+(\(\mu = 10\) g/mol) and therefore the largest atmospheric extent
+(\(H = 23.17\) km). The 50\% Xe, 50\% methane atmosphere has an
+intermediate extent (\(H = 3.17\) km).
+
+    \subsection{Problem 2:}\label{problem-2}
+
+\begin{quote}
+{[}4 points total{]} A spherical hot-air balloon is designed to float at
+the \textasciitilde{}1 bar, 60 K level in the atmosphere of Neptune.
+Scientists hope to track the winds in the atmosphere of Neptune by
+following the motion of the balloon. The balloon is also instrumented
+with atmospheric sensors. The weight of the balloon and payload is 30
+kg. What balloon volume and radius is required for a ``hot air''
+temperature of 100 K? (Data: mean molar mass of Neptune atmosphere = 2.6
+g/mol). {[}4 pts{]}
+\end{quote}
+
+Here's what we know:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}67}]:} \PY{n}{P2} \PY{o}{=} \PY{l+m+mf}{1.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{P2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}67}]:}
+    
+    \(1 \; \mathrm{bar}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}146}]:} \PY{n}{T2} \PY{o}{=} \PY{l+m+mf}{60.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}146}]:}
+    
+    \(60 \; \mathrm{K}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}82}]:} \PY{n}{m\PYZus{}payload} \PY{o}{=} \PY{l+m+mf}{30.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{kg}\PY{p}{;} \PY{n}{m\PYZus{}payload} 
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}82}]:}
+    
+    \(30 \; \mathrm{kg}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}71}]:} \PY{n}{T\PYZus{}hot\PYZus{}air} \PY{o}{=} \PY{l+m+mf}{100.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T\PYZus{}hot\PYZus{}air}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}71}]:}
+    
+    \(100 \; \mathrm{K}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}72}]:} \PY{n}{mu\PYZus{}Nep} \PY{o}{=} \PY{l+m+mf}{2.6} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{mu\PYZus{}Nep}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}72}]:}
+    
+    \(2.6 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    An object inbedded in another medium will float due to buoyancy if the
+downward weight (\(mg\)) of the object is equal to the weight of the
+displaced medium. This is Archimedes' principle. In other words, the net
+force on the payload must be zero. From the notes we can write the
+buoyancy force as,\\
+\[ F_{buoy} = -g (\rho_{in} - \rho_{out}) V \]\\
+which must balance the downward force of the balloon payload,\\
+\[ F_{pay} = m_p g .\]\\
+Setting \(F_{buoy} = F_{pay}\) and solving for the balloon volume, we
+get\\
+\[V = \frac{m_p}{\rho_{out} - \rho_{in}}\]
+
+Ultimately it is the temperature difference between the gas inside the
+balloon versus outside that drives the density difference that provides
+the buoyant force. We'll calculate the density of an ideal gas:
+\[ \rho = \frac{\bar{m} P }{k T} \]\\
+Inside the balloon the density is:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}144}]:} \PY{n}{rho\PYZus{}in} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{mu\PYZus{}Nep} \PY{o}{/} \PY{n}{NA}\PY{p}{)} \PY{o}{*} \PY{n}{P2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T\PYZus{}hot\PYZus{}air}\PY{p}{)}\PY{p}{;} \PY{n}{rho\PYZus{}in} 
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}144}]:}
+    
+    \(0.31270823 \; \mathrm{\frac{kg}{m^{3}}}\)
+
+    
+
+    and outside the balloon the density is:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}147}]:} \PY{n}{rho\PYZus{}out} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{mu\PYZus{}Nep} \PY{o}{/} \PY{n}{NA}\PY{p}{)} \PY{o}{*} \PY{n}{P2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{k} \PY{o}{*} \PY{n}{T2}\PY{p}{)}\PY{p}{;} \PY{n}{rho\PYZus{}out}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}147}]:}
+    
+    \(0.52118038 \; \mathrm{\frac{kg}{m^{3}}}\)
+
+    
+
+    Now we'll solve for the balloon volume,
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}159}]:} \PY{n}{V} \PY{o}{=} \PY{n}{m\PYZus{}payload} \PY{o}{/} \PY{p}{(}\PY{n}{rho\PYZus{}out} \PY{o}{\PYZhy{}} \PY{n}{rho\PYZus{}in}\PY{p}{)}\PY{p}{;} \PY{n}{V}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}159}]:}
+    
+    \(143.90411 \; \mathrm{m^{3}}\)
+
+    
+
+    And, assuming the balloon is spherical we can trivially find the radius:
+\[ V = \frac{4}{3} \pi R^3 \rightarrow R = \left ( \frac{3V}{4 \pi} \right ) ^{1/3}\]
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}161}]:} \PY{n}{R} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{l+m+mf}{3.} \PY{o}{*} \PY{n}{V}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mf}{4.} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.}\PY{o}{/}\PY{l+m+mf}{3.}\PY{p}{)}\PY{p}{;} \PY{n}{R}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}161}]:}
+    
+    \(3.2508345 \; \mathrm{m}\)
+
+    
+
+    A 3.25-m radius balloon seems reasonably sized.
+
+    \subsection{Problem 3:}\label{problem-3}
+
+\begin{quote}
+{[}6 points total{]} In deriving the hydrostatic equation for an
+isothermal planetary atmosphere, we assumed that the scale height \(H\)
+was much smaller than the radius of the planet; that is, that \(g\) can
+be considered a constant throughout the atmosphere, as a reasonable
+approximation. Suppose early Titan had much hydrogen in its atmosphere.
+If so, our approximation is no longer valid because \(g = (GM)/r^2\) at
+planetocentric distance \(r\).
+\end{quote}
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\tightlist
+\item
+  Re-derive the hydrostatic equation for this case, taking into account
+  the variation of g with planetocentric distance. I suggest you start
+  with \(dP / P = −(\bar{m}g / R\bar{T} )dr\) . {[}3 pts{]}\\
+\item
+  Assume that early Titan's atmosphere was made of pure hydrogen
+  (H\(_2\)). What would be the scale height using the usual formula and
+  assuming an isothermal temperature of 90 K? Look up Titan's radius. As
+  a percentage, how much is the scale height a fraction of Titan's
+  radius? {[}Titan \(g = 1.37\) m/s\(^2\){]} {[}2 pts{]}\\
+\item
+  Why is a pure hydrogen atmosphere unlikely to be found around a planet
+  like Titan? {[}1 pt{]}
+\end{enumerate}
+\end{quote}
+
+\subsubsection{Part 1:}\label{part-1}
+
+Starting with the hydrostatic equation,\\
+\[ \frac{dP}{P} = - \left ( \frac{\bar{m}g}{R\bar{T}} \right) dr \]\\
+and plugging in \[ g = \frac{GM}{r^2} \] we get,\\
+\[ \frac{dP}{P} = - \left ( \frac{GM\bar{m}}{R\bar{T}} \right ) \frac{dr}{r^2}\]\\
+Now we want to integrate both sides of the above expression from the
+surface (at \(z=R_p\)) to some height z,\\
+\[ \int_{p_s}^{p(z)} \frac{dP}{P} = - \left ( \frac{GM\bar{m}}{R\bar{T}} \right ) \int_{R_p}^{z} \frac{dr}{r^2}\]\\
+\[ \ln \left ( \frac{p(z)}{p_s} \right ) = \left ( \frac{GM\bar{m}}{R\bar{T}} \right ) \left ( \frac{1}{z} - \frac{1}{R_p} \right ) \]\\
+Exponentiate both sides and simplifying our result,\\
+\[ p(z) = p_s \exp \left ( \frac{-GM\bar{m}}{R_p R\bar{T}} \right ) \exp \left ( \frac{GM\bar{m}}{z R\bar{T}}  \right )
+\]\\
+If we define the surface gravity,\\
+\[ g_s = \frac{GM}{R_p^2} \]\\
+Then we can write the typical pressure scale height as\\
+\[ H = \frac{R \bar{T}}{g_s} \]\\
+Our solution now simplifies to:
+\[ p(z) = p_s \exp \left ( \frac{-R_p}{H} \right ) \exp \left ( \frac{R_p^2}{H z}  \right ) \]
+
+\subsubsection{Part 2:}\label{part-2}
+
+Starting the isothermal temperature of
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}169}]:} \PY{n}{T3} \PY{o}{=} \PY{l+m+mi}{90} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{K}\PY{p}{;} \PY{n}{T3}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}169}]:}
+    
+    \(90 \; \mathrm{K}\)
+
+    
+
+    The mean molecular weight for hydrogen gas:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}165}]:} \PY{n}{muH2} \PY{o}{=} \PY{l+m+mf}{2.0} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{muH2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}165}]:}
+    
+    \(2 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    which, in grams, is
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}166}]:} \PY{n}{mH2} \PY{o}{=} \PY{n}{muH2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{mH2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}166}]:}
+    
+    \(3.3210781 \times 10^{-24} \; \mathrm{g}\)
+
+    
+
+    The gravity of Titan:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}167}]:} \PY{n}{g\PYZus{}titan} \PY{o}{=} \PY{l+m+mf}{1.37} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g\PYZus{}titan}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}167}]:}
+    
+    \(1.37 \; \mathrm{\frac{m}{s^{2}}}\)
+
+    
+
+    We calculate the pressure scale height to be:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}171}]:} \PY{n}{H3} \PY{o}{=} \PY{n}{pressure\PYZus{}scale\PYZus{}height}\PY{p}{(}\PY{n}{T3}\PY{p}{,} \PY{n}{mH2}\PY{p}{,} \PY{n}{g\PYZus{}titan}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{o}{.}\PY{n}{in\PYZus{}units}\PY{p}{(}\PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{o}{/}\PY{n}{u}\PY{o}{.}\PY{n}{m}\PY{p}{;} \PY{n}{H3}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}171}]:}
+    
+    \(273.1027 \; \mathrm{km}\)
+
+    
+
+    Titan's radius is
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}172}]:} \PY{n}{R\PYZus{}titan} \PY{o}{=} \PY{l+m+mf}{2576.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{km}\PY{p}{;} \PY{n}{R\PYZus{}titan}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}172}]:}
+    
+    \(2576 \; \mathrm{km}\)
+
+    
+
+    This means that if Titan ever had a pure hydrogen atmosphere, the
+pressure scale height would have been
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}175}]:} \PY{n}{H3} \PY{o}{/} \PY{n}{R\PYZus{}titan} \PY{o}{*} \PY{l+m+mi}{100} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{percent}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}175}]:}
+    
+    \(10.601813 \; \mathrm{\%}\)
+
+    
+
+    the radius of Titan.
+
+    \subsubsection{Part 3:}\label{part-3}
+
+A pure hydrogen atmosphere is unlikely to be found for a planet like
+Titan because the low mass of hydrogen leads to such a vertically
+extended atmosphere that the molecules can easily escape the low gravity
+of the small world. Becuase temperature is the average kinetic energy of
+the molecules in a gas, low mass molecules achieve much higher
+velocities than heavier molecules (like carbon dioxide and hydrocarbons)
+at any given temperature. Atmospheric escape can occur when the velocity
+of molecules exceeds the escape velocity of a planet. This condition is
+easily met for hydrogen in the atmospheres of small planets and moons.
+
+    \subsection{Problem 4:}\label{problem-4}
+
+\begin{quote}
+{[}7 points{]} An Earth-based spectroscopic measurement of the strength
+of some features in the infrared spectrum of Mars reports a column
+abundance of CO2 of 8000 cm-amagat.
+\end{quote}
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  What is the corresponding surface pressure of carbon dioxide in
+  millibars? {[}Data: molar mass of CO2 is 44 g/mol; Martian gravity g =
+  3.72 m s-2{]}. {[}4 pts{]}
+\end{enumerate}
+\end{quote}
+
+\begin{quote}
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  The paper reporting this result does not bother to tell us whether the
+  abundance refers to the sub-Earth region of Mars (i.e.~a vertical
+  incidence region of Mars in the direct line-of-sight from Earth) or to
+  an average over the entire disk of Mars. Would the surface pressure be
+  less, the same, or greater than the value calculated in (a) if the
+  reported abundance is actually a whole- disk average? Justify your
+  answer in a qualitative fashion. (With a bit of thought and `one step'
+  arithmetic, it is possible to calculate disk-average pressure versus
+  line of sight pressure. You're looking to deduce a weighting factor
+  for a disk average rather than a direct path perpendicular to the
+  surface at the equator. This gets a bonus point, but if you're not
+  sure, don't sweat it because it's subtle). {[}2 pts + 1 bonus pt{]}
+\end{enumerate}
+\end{quote}
+
+    \subsubsection{Part 1:}\label{part-1}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}189}]:} \PY{n}{atm} \PY{o}{=} \PY{l+m+mf}{1.01325} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{atm}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}189}]:}
+    
+    \(1.01325 \; \mathrm{bar}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}193}]:} \PY{n}{Nc} \PY{o}{=} \PY{l+m+mf}{8000.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{cm}\PY{o}{*} \PY{n}{atm} \PY{p}{;}\PY{n}{Nc}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}193}]:}
+    
+    \(8106 \; \mathrm{bar\,cm}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}185}]:} \PY{n}{muCO2} \PY{o}{=} \PY{l+m+mf}{44.} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{g} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{mol}\PY{p}{;} \PY{n}{muCO2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}185}]:}
+    
+    \(44 \; \mathrm{\frac{g}{mol}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}187}]:} \PY{n}{mCO2} \PY{o}{=} \PY{n}{muCO2} \PY{o}{/} \PY{n}{NA}\PY{p}{;} \PY{n}{mCO2}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}187}]:}
+    
+    \(7.3063718 \times 10^{-23} \; \mathrm{g}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}186}]:} \PY{n}{g\PYZus{}mars} \PY{o}{=} \PY{l+m+mf}{3.72} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{m} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{second}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{;} \PY{n}{g\PYZus{}mars}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}186}]:}
+    
+    \(3.72 \; \mathrm{\frac{m}{s^{2}}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}181}]:} \PY{n}{n0} \PY{o}{=} \PY{l+m+mf}{2.687e19} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{cm}\PY{o}{*}\PY{o}{*}\PY{o}{\PYZhy{}}\PY{l+m+mi}{3}\PY{p}{;} \PY{n}{n0}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}181}]:}
+    
+    \(2.687 \times 10^{19} \; \mathrm{\frac{1}{cm^{3}}}\)
+
+    
+
+    \[ p(z) = N_c(z) \bar{m} g \]
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}210}]:} \PY{n}{p\PYZus{}mars} \PY{o}{=} \PY{n}{Nc}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{n0}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{mCO2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{g\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{;} \PY{n}{p\PYZus{}mars}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}210}]:}
+    
+    \(59199627 \; \mathrm{\frac{kg^{2}}{m^{2}\,s^{4}}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}188}]:} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}188}]:}
+    
+    \(\mathrm{100000\,\frac{kg}{m\,s^{2}}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}191}]:} \PY{n}{Nc}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}191}]:}
+    
+    \(8106000 \; \mathrm{\frac{kg}{s^{2}}}\)
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}195}]:} \PY{n}{p\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}195}]:}
+    
+    \(59199627 \; \mathrm{\frac{kg^{2}}{m^{2}\,s^{4}}}\)
+
+    
+
+    This equation from the notes:
+
+\[ p(z) = N_c(z) \bar{m} g \]
+
+doesn't have the correct units. The RHS has units of pressure squared. I
+think the correct equation should be:
+
+\[ p(z) = \sqrt{N_c(z) \bar{m} g} \]
+
+Using this expression we get:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}213}]:} \PY{n}{p\PYZus{}mars} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{p}{(}\PY{n}{n0} \PY{o}{*} \PY{n}{Nc}\PY{p}{)}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{g\PYZus{}mars}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{mCO2}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{;} \PY{n}{p\PYZus{}mars}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}213}]:}
+    
+    \(7694.1294 \; \mathrm{\frac{kg}{m\,s^{2}}}\)
+
+    
+
+    Converting to bars, this is
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}230}]:} \PY{n}{ppp} \PY{o}{=} \PY{p}{(}\PY{n}{p\PYZus{}mars} \PY{o}{/} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{decompose}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{n}{u}\PY{o}{.}\PY{n}{bar}\PY{p}{;} \PY{n}{ppp}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}230}]:}
+    
+    \(0.076941294 \; \mathrm{bar}\)
+
+    
+
+    This is about 77 mbar of CO\(_2\) at the surface of Mars, roughly an
+order of magnitude higher than the true surface pressure of Mars
+(\({\sim}6\) mbar).
+
+    \subsubsection{Part 2:}\label{part-2}
+
+If the reported column abundance were disk-integrated, rather than the
+vertical column at the sub-Earth point, the inferred surface pressure
+would be lower. The sub-Earth path to the surface is the minimum
+possible path over the ensemble of paths that connect the observer and
+all visible locations of the surface of Mars. Integrating the column
+abundance over the entire disk will necessarily include contributions
+from these longer paths, which encounter more CO\(_2\) molecules, and
+bias us towards higher surface pressures if we misinterpret it for only
+the sub-observer view.
+
+Since the true surface pressure to the CO\(_2\)-dominated Martian
+atmosphere is \({\sim}6\) mbar, we are off by a factor of about 10. So
+perhaps the weighting factor is 10 or, better yet, \(\pi^2\), since that
+is the area of the disk in normalized units.
+
+To rigorously solve for the difference between inferred surface
+pressures using the nadir and disk-integrated views we must calculate
+the disk-averaged path length to the surface. This requires some
+geometry and a 2D integral over the visible disk of Mars.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} 
+\end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
